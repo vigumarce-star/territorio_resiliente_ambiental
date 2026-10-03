@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Misión Territorio Resiliente</title>
+<style>
+:root{--ink:#24322d;--muted:#66736d;--line:#d8dfdb;--panel:#f5f8f6;--accent:#356b52;--bg:#e7f0eb;--warn:#8d6d30;--warnbg:#f7f0df}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:white}main{max-width:960px;margin:auto;padding:20px}.hero,.card{border:1px solid var(--line);border-radius:16px;padding:20px}.hero{background:var(--bg)}.card{background:var(--panel);margin-top:16px}.tag{display:inline-block;padding:5px 9px;border:1px solid #cedbd3;border-radius:999px;background:white;color:var(--accent);font-size:12px;font-weight:800}.bar{height:8px;background:#e2e8e4;border-radius:99px;margin:17px 0}.bar span{display:block;height:100%;background:var(--accent);width:10%;transition:.25s}.screen{display:none}.screen.active{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.choices{display:grid;gap:9px}.choices button,.btn{min-height:44px;border-radius:9px;border:1px solid var(--line);padding:11px 14px;font:inherit;cursor:pointer}.choices button{text-align:left;background:white;color:var(--ink)}.choices button.selected{background:var(--bg);border-color:var(--accent);font-weight:800}.btn{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:800}.btn.secondary{background:#fff;color:var(--accent)}label{display:block;font-weight:800;margin:12px 0 6px}textarea,input{width:100%;font:inherit;padding:11px;border:1px solid #cbd5cf;border-radius:9px;background:white}textarea{min-height:90px;resize:vertical}.small{font-size:14px;color:var(--muted);line-height:1.5}.callout,.feedback{padding:14px 16px;border-radius:10px;background:white;border-left:4px solid var(--accent);margin-top:14px}.feedback{border-left-color:var(--warn);background:var(--warnbg)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.doc{background:white;border:1px solid var(--line);padding:18px;border-radius:12px}.doc h4{margin:16px 0 5px;border-bottom:1px solid #e1e6e3;padding-bottom:5px}.score{font-size:32px;font-weight:900;color:var(--accent)}footer{margin-top:18px;color:var(--muted);font-size:13px}@media(max-width:680px){.grid{grid-template-columns:1fr}main{padding:12px}}
+@media print{body *{visibility:hidden}.printable,.printable *{visibility:visible}.printable{position:absolute;left:0;top:0;width:100%}}
+</style></head>
+<body><main id="app">
+<div class="hero"><span class="tag">COMUNIDADES Y TERRITORIO · FASE 3</span><h1>Misión Territorio Resiliente</h1><p>Laboratorio individual para pasar de un problema ambiental o territorial a una propuesta de intervención sustentada.</p><p class="small"><b>Situación:</b> selecciona un problema ambiental o territorial real. Puede relacionarse con agua, suelo, biodiversidad, residuos, contaminación, cambio climático, conflictos socioambientales, degradación de ecosistemas, actividades productivas u otra situación que puedas sustentar con evidencia.</p></div>
+<div class="bar"><span id="bar"></span></div>
+
+<section class="screen active" data-n="1"><div class="card"><span class="tag">1 · Comprender</span><h2>¿Qué problema quieres intervenir?</h2><p>No empieces por una solución. Describe el problema y qué necesitarías demostrar.</p><label>Problema territorial</label><textarea id="problema" placeholder="Explica el problema con tus propias palabras."></textarea><label>Evidencia requerida</label><textarea id="evidencia" placeholder="Datos climáticos, testimonios, observación, registros, información ambiental..."></textarea><div class="actions"><button class="btn" onclick="go(2)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="2"><div class="card"><span class="tag">2 · Diagnóstico crítico</span><h2>Localiza el punto crítico</h2><p>Escoge dónde observas la principal tensión del problema ambiental o territorial.</p><div class="choices" id="puntos"><button onclick="pick('punto','Agua, disponibilidad, calidad o regulación hídrica',this)">Agua, disponibilidad, calidad o regulación hídrica</button><button onclick="pick('punto','Suelo, degradación o erosión',this)">Suelo, degradación o erosión</button><button onclick="pick('punto','Actividades productivas o económicas',this)">Actividades productivas o económicas</button><button onclick="pick('punto','Medios de vida y bienestar',this)">Medios de vida y bienestar</button><button onclick="pick('punto','Capacidades y organización comunitaria',this)">Capacidades y organización comunitaria</button><button onclick="pick('punto','Ecosistemas, biodiversidad y servicios ecosistémicos',this)">Ecosistemas, biodiversidad y servicios ecosistémicos</button></div><label>Causas y relaciones</label><textarea id="causas" placeholder="Relaciona causas, condiciones del territorio, población o elementos afectados y consecuencias. Si existe un componente climático, hazlo explícito."></textarea><div id="fb2"></div><div class="actions"><button class="btn secondary" onclick="go(1)">Atrás</button><button class="btn" onclick="retro(2);go(3)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="3"><div class="card"><span class="tag">3 · ABC</span><h2>Mira el problema desde la comunidad</h2><p>La Adaptación Basada en Comunidades parte de capacidades, conocimientos, necesidades y decisiones de la población.</p><div class="grid"><div><label>Capacidad que debería fortalecerse</label><textarea id="capacidad"></textarea></div><div><label>Actores con papel clave</label><textarea id="actores"></textarea></div></div><label>Acción comunitaria</label><textarea id="accionABC"></textarea><div class="callout"><b>Pregunta difícil:</b> ¿la comunidad tiene capacidad real para decidir o solo está siendo convocada para participar?</div><div id="fb3"></div><div class="actions"><button class="btn secondary" onclick="go(2)">Atrás</button><button class="btn" onclick="retro(3);go(4)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="4"><div class="card"><span class="tag">4 · AbE</span><h2>Haz visible la función del ecosistema</h2><p>Conecta riesgo, ecosistema o servicio, función ecológica y beneficio para las personas.</p><div class="grid"><div><label>Ecosistema o elemento</label><textarea id="ecosistema"></textarea></div><div><label>Función o servicio</label><textarea id="funcion"></textarea></div></div><label>¿Qué conservar, restaurar o manejar?</label><textarea id="accionAbE"></textarea><label>¿Para quién es relevante?</label><textarea id="benefAbE"></textarea><div id="fb4"></div><div class="actions"><button class="btn secondary" onclick="go(3)">Atrás</button><button class="btn" onclick="retro(4);go(5)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="5"><div class="card"><span class="tag">5 · SbN</span><h2>Conecta naturaleza y desafío social</h2><p>Una SbN debe responder a un desafío social o territorial y generar beneficios para las personas y la biodiversidad.</p><label>Desafío social o territorial</label><textarea id="desafio"></textarea><label>Acción sobre la naturaleza</label><textarea id="accionSbN"></textarea><div class="grid"><div><label>Beneficios esperados</label><textarea id="benefSbN"></textarea></div><div><label>Posible tensión, costo o efecto no deseado</label><textarea id="tension"></textarea></div></div><div class="callout"><b>Pregunta difícil:</b> ¿cómo demostrarías que tu acción sobre la naturaleza responde al desafío y no solamente mejora el paisaje?</div><div id="fb5"></div><div class="actions"><button class="btn secondary" onclick="go(4)">Atrás</button><button class="btn" onclick="retro(5);go(6)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="6"><div class="card"><span class="tag">6 · Integración</span><h2>Construye la arquitectura de tu intervención</h2><p>No necesitas usar los tres enfoques. Explica por qué el seleccionado responde al diagnóstico y si realmente es pertinente para el problema que elegiste.</p><div class="choices" id="enfoques"><button onclick="pick('enfoque','ABC',this)">ABC · Comunidad como eje</button><button onclick="pick('enfoque','AbE',this)">AbE · Ecosistemas como soporte de adaptación</button><button onclick="pick('enfoque','SbN',this)">SbN · Naturaleza frente al desafío social</button><button onclick="pick('enfoque','ABC + AbE',this)">ABC + AbE</button><button onclick="pick('enfoque','ABC + SbN',this)">ABC + SbN</button><button onclick="pick('enfoque','ABC + AbE + SbN',this)">ABC + AbE + SbN</button></div><label>Justificación de la elección</label><textarea id="justificacion"></textarea><label>Objetivo de intervención</label><textarea id="objetivo"></textarea><label>Acciones estratégicas</label><textarea id="acciones" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea><div id="fb6"></div><div class="actions"><button class="btn secondary" onclick="go(5)">Atrás</button><button class="btn" onclick="retro(6);go(7)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="7"><div class="card"><span class="tag">7 · Equidad</span><h2>¿Para quién funciona?</h2><p>Examina poder, participación, recursos, trabajo, costos y beneficios.</p><div class="grid"><div><label>¿Quién decide?</label><textarea id="decide"></textarea></div><div><label>¿Quién participa y quién puede quedar fuera?</label><textarea id="participa"></textarea></div><div><label>¿Quién asume costos y responsabilidades?</label><textarea id="costos"></textarea></div><div><label>¿Quién recibe beneficios?</label><textarea id="beneficios"></textarea></div></div><label>Interseccionalidad</label><textarea id="interseccionalidad" placeholder="¿Cómo cambia la experiencia del riesgo según género, edad, ingresos, tenencia de tierra, pertenencia étnica, discapacidad o ubicación?"></textarea><div id="fb7"></div><div class="actions"><button class="btn secondary" onclick="go(6)">Atrás</button><button class="btn" onclick="retro(7);go(8)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="8"><div class="card"><span class="tag">8 · Viabilidad</span><h2>¿Qué debes demostrar para defenderla?</h2><div class="grid"><div><label>Técnica</label><textarea id="tecnica"></textarea></div><div><label>Social</label><textarea id="social"></textarea></div><div><label>Cultural</label><textarea id="cultural"></textarea></div><div><label>Económica y gobernanza</label><textarea id="economica"></textarea></div></div><label>Ambiental</label><textarea id="ambiental"></textarea><label>Condición mínima para defender la propuesta</label><textarea id="condicion"></textarea><div id="fb8"></div><div class="actions"><button class="btn secondary" onclick="go(7)">Atrás</button><button class="btn" onclick="retro(8);go(9)">Continuar</button></div></div></section>
+
+<section class="screen" data-n="9"><div class="card"><span class="tag">9 · Pregunta difícil</span><h2>Deja que tu propuesta sea cuestionada</h2><p>Selecciona una tensión y responde. Una buena respuesta puede implicar modificar la propuesta.</p><div class="choices" id="retos"><button onclick="pick('reto','Técnica',this);retoIA()">¿Seguirá funcionando si cambian las condiciones ambientales o aumenta la presión sobre el territorio?</button><button onclick="pick('reto','Social',this);retoIA()">¿Quién participa y quién queda fuera?</button><button onclick="pick('reto','Cultural',this);retoIA()">¿Qué saber o práctica podría debilitar?</button><button onclick="pick('reto','Económica',this);retoIA()">¿Quién asume costos y durante cuánto tiempo?</button><button onclick="pick('reto','Ambiental',this);retoIA()">¿Qué impacto indirecto puede aparecer?</button><button onclick="pick('reto','Poder',this);retoIA()">¿Quién puede decir “no” o modificarla?</button></div><div id="retoBox" class="feedback"><b>Retroalimentación retadora:</b><p>Selecciona una pregunta.</p></div><label>Respuesta</label><textarea id="respuesta"></textarea><label>Ajuste después de la objeción</label><textarea id="ajuste"></textarea><div class="actions"><button class="btn secondary" onclick="go(8)">Atrás</button><button class="btn" onclick="finalizar()">Generar documento y retroalimentación</button></div></div></section>
+
+<section class="screen" data-n="10"><div class="card"><span class="tag">10 · Retroalimentación</span><h2>IA tutora · lectura retadora</h2><div id="ia" class="feedback"></div><p class="small">El indicador es orientador. La función principal de esta retroalimentación es hacer visibles supuestos, vacíos y condiciones que aún debes comprobar con información del territorio.</p><div id="doc" class="printable"><h2>Ficha de propuesta de intervención</h2><p class="small">Documento generado a partir de la información registrada.</p><div id="docContent" class="doc"></div></div><div class="actions"><button class="btn" onclick="window.print()">Imprimir / guardar PDF</button><button class="btn secondary" onclick="descargar()">Descargar HTML</button><button class="btn secondary" onclick="reiniciar()">Reiniciar</button></div></div></section>
+<footer>La herramienta guía la argumentación. La propuesta debe verificarse posteriormente con evidencia territorial, fuentes técnicas, información científica y diálogo con los actores.</footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  const S = { punto: '', enfoque: '', reto: '' };
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? (el.value || '').trim() : '';
+  }
+
+  function esc(s) {
+    return String(s || 'Sin registrar').replace(/[&<>]/g, function (c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]);
+    });
+  }
+
+  window.go = function (n) {
+    n = Number(n);
+    if (!Number.isFinite(n) || n < 1 || n > 10) return;
+
+    document.querySelectorAll('.screen').forEach(function (screen) {
+      screen.classList.toggle('active', Number(screen.dataset.n) === n);
+    });
+
+    const bar = document.getElementById('bar');
+    if (bar) bar.style.width = (n * 10) + '%';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.pick = function (key, value, el) {
+    S[key] = value;
+    if (el && el.parentElement) {
+      el.parentElement.querySelectorAll('button').forEach(function (b) {
+        b.classList.remove('selected');
+      });
+      el.classList.add('selected');
+    }
+  };
+
+  window.box = function (n, msg) {
+    const x = document.getElementById('fb' + n);
+    if (x) {
+      x.innerHTML = '<div class="feedback"><b>Retroalimentación retadora</b>' + msg + '</div>';
+    }
+  };
+
+  window.retro = function (n) {
+    const m = [];
+
+    if (n === 2) {
+      if (!S.punto) m.push('<p>Falta escoger el punto crítico. Una propuesta amplia corre el riesgo de no mostrar qué cambia realmente.</p>');
+      if (val('causas').length < 70) m.push('<p>Tu explicación causal todavía es corta. Relaciona amenaza, exposición, vulnerabilidad e impactos concretos.</p>');
+      else m.push('<p>Ahora debes comprobar las relaciones causales con evidencia. No conviertas una asociación percibida en una causalidad demostrada.</p>');
+    }
+
+    if (n === 3) {
+      if (val('capacidad').length < 50) m.push('<p>“Capacitar a la comunidad” sería demasiado general. Precisa qué capacidad falta, quién la necesita y para qué decisión.</p>');
+      if (val('accionABC').length < 50) m.push('<p>La acción ABC necesita mostrar quién la sostiene, qué cambia y cómo se observaría el cambio.</p>');
+      m.push('<p><b>Pregunta:</b> ¿la comunidad tiene poder real de decisión o solo participa en la ejecución?</p>');
+    }
+
+    if (n === 4) {
+      if (val('funcion').length < 40) m.push('<p>No basta nombrar un ecosistema. Debes demostrar qué función cumple y cómo reduce una vulnerabilidad.</p>');
+      if (val('accionAbE').length < 50) m.push('<p>Evita que “reforestar” sea la respuesta automática. Define dónde, para qué función y qué evidencia mostraría adaptación.</p>');
+      m.push('<p><b>Pregunta:</b> ¿qué pasa si mejoras el ecosistema pero no reduces el riesgo?</p>');
+    }
+
+    if (n === 5) {
+      if (val('desafio').length < 50) m.push('<p>Formula el desafío social de forma concreta, no solamente como un problema ambiental.</p>');
+      if (val('accionSbN').length < 50) m.push('<p>Una acción ambiental no es automáticamente una SbN. Debes demostrar desafío → naturaleza → beneficios.</p>');
+      if (val('tension').length < 35) m.push('<p>Falta reconocer una tensión. Toda solución territorial produce costos, acuerdos o efectos que deben anticiparse.</p>');
+      m.push('<p><b>Pregunta:</b> ¿la naturaleza es parte de la solución o solo el escenario de la intervención?</p>');
+    }
+
+    if (n === 6) {
+      if (!S.enfoque) m.push('<p>No has seleccionado el enfoque. La decisión debe derivarse del diagnóstico.</p>');
+      if (val('justificacion').length < 70) m.push('<p>Compara alternativas. Explica por qué la combinación elegida es pertinente.</p>');
+      if (val('objetivo').length < 70) m.push('<p>El objetivo necesita poder traducirse en resultados observables.</p>');
+      m.push('<p><b>Pregunta:</b> ¿qué elemento de tu propuesta podría eliminarse sin afectar el objetivo? Si ninguno, explica la articulación.</p>');
+    }
+
+    if (n === 7) {
+      if (val('decide').length < 30 || val('participa').length < 30) m.push('<p>No basta listar actores. Haz visible quién tiene poder real de decisión y quién puede quedar por fuera.</p>');
+      if (val('interseccionalidad').length < 50) m.push('<p>La interseccionalidad necesita un efecto concreto sobre exposición, vulnerabilidad, capacidades, costos o beneficios.</p>');
+      m.push('<p><b>Pregunta:</b> ¿quién podría quedar peor después de implementar tu propuesta y qué salvaguarda propones?</p>');
+    }
+
+    if (n === 8) {
+      const weak = ['tecnica','social','cultural','economica','ambiental'].filter(function (x) {
+        return val(x).length < 35;
+      }).length;
+      if (weak >= 3) m.push('<p>La viabilidad todavía está formulada como intención. Convierte cada dimensión en una condición verificable.</p>');
+      else if (weak > 0) m.push('<p>Hay dimensiones de viabilidad débiles. Una propuesta técnicamente posible puede ser social o culturalmente inviable.</p>');
+      m.push('<p><b>Pregunta:</b> si solo pudieras hacer una comprobación antes de invertir recursos, ¿cuál sería y qué decisión dependería de ella?</p>');
+    }
+
+    box(n, m.join(''));
+  };
+
+  window.retoIA = function () {
+    const t = {
+      Técnica:'¿Qué evidencia o condición demostraría que la propuesta sigue funcionando bajo las condiciones ambientales que caracterizan el problema?',
+      Social:'¿Quién decide, quién aporta trabajo y quién podría quedar excluido?',
+      Cultural:'¿Estás transformando una práctica porque mejora la adaptación o porque supones que el conocimiento existente es un problema?',
+      Económica:'¿Qué costos aparecen después de la inversión inicial y quién los asume?',
+      Ambiental:'¿Qué efecto indirecto puede generarse al modificar cobertura, agua, suelo o biodiversidad?',
+      Poder:'¿Quién gana capacidad de decidir con tu propuesta y quién podría perderla?'
+    };
+    const boxEl = document.getElementById('retoBox');
+    if (boxEl) {
+      boxEl.innerHTML = '<b>Retroalimentación retadora:</b><p>' +
+        esc(t[S.reto] || 'Selecciona una pregunta.') + '</p>';
+    }
+  };
+
+  function evaluar() {
+    const issues = [], fort = [];
+    let score = 0;
+
+    const req = {
+      problema:'Problema', evidencia:'Evidencia', causas:'Causas',
+      capacidad:'ABC', accionABC:'Acción ABC', ecosistema:'Ecosistema',
+      funcion:'Función AbE', accionAbE:'Acción AbE', desafio:'Desafío social',
+      accionSbN:'Acción SbN', benefSbN:'Beneficios', justificacion:'Justificación',
+      objetivo:'Objetivo', acciones:'Acciones', decide:'Decisión',
+      participa:'Participación', interseccionalidad:'Interseccionalidad',
+      tecnica:'Viabilidad técnica', social:'Viabilidad social',
+      cultural:'Viabilidad cultural', economica:'Viabilidad económica y gobernanza',
+      ambiental:'Viabilidad ambiental', respuesta:'Respuesta a la objeción',
+      ajuste:'Ajuste'
+    };
+
+    Object.entries(req).forEach(function ([id, label]) {
+      const n = val(id).length;
+      if (n >= 80) {
+        score += 4;
+        fort.push(label);
+      } else if (n >= 35) {
+        score += 2;
+      } else {
+        issues.push(label);
+      }
+    });
+
+    if (S.punto) score += 5; else issues.push('Punto crítico');
+    if (S.enfoque) score += 5; else issues.push('Enfoque');
+    if (S.reto) score += 3; else issues.push('Pregunta difícil');
+
+    score = Math.min(100, score);
+
+    const ch = [];
+    if (val('evidencia').length < 60) ch.push('Necesitas transformar la evidencia en una condición de decisión: ¿qué dato permitiría aceptar, ajustar o descartar la propuesta?');
+    if (val('funcion').length < 60) ch.push('La función ecológica no está suficientemente demostrada. El nombre del ecosistema no sustituye la relación funcional.');
+    if (val('interseccionalidad').length < 60) ch.push('La equidad debe traducirse en decisiones: participación, poder, recursos, trabajo, costos y beneficios.');
+    if (val('ajuste').length < 40) ch.push('La objeción no produjo un cambio visible. Explica por qué mantienes la propuesta o qué modificaste.');
+    if (val('tension').length < 40) ch.push('Falta explicitar un intercambio o efecto no deseado. La sostenibilidad exige reconocerlo.');
+    if (!ch.length) ch.push('La propuesta está suficientemente desarrollada para una discusión académica. El siguiente paso es verificar sus supuestos con evidencia territorial.');
+
+    return { score, issues, fort, ch };
+  }
+
+  window.finalizar = function () {
+    const r = evaluar();
+    const ia = document.getElementById('ia');
+
+    if (ia) {
+      ia.innerHTML =
+        '<h3>Lectura de la IA tutora</h3>' +
+        '<p><b>Indicador de solidez argumentativa: <span class="score">' + r.score + '/100</span></b></p>' +
+        '<p><b>Fortalezas observables:</b></p><ul>' +
+        r.fort.slice(0,6).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') +
+        '</ul><p><b>Vacíos que debes resolver:</b></p><ul>' +
+        r.issues.slice(0,9).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') +
+        '</ul><p><b>Desafíos para una segunda revisión:</b></p><ul>' +
+        r.ch.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') +
+        '</ul>';
+    }
+
+    const c =
+      '<h4>Problema</h4><p>' + esc(val('problema')) + '</p>' +
+      '<h4>Evidencia requerida</h4><p>' + esc(val('evidencia')) + '</p>' +
+      '<h4>Punto crítico</h4><p>' + esc(S.punto) + '</p><p>' + esc(val('causas')) + '</p>' +
+      '<h4>ABC</h4><p><b>Capacidad:</b> ' + esc(val('capacidad')) + '</p><p><b>Actores:</b> ' + esc(val('actores')) + '</p><p><b>Acción:</b> ' + esc(val('accionABC')) + '</p>' +
+      '<h4>AbE</h4><p><b>Ecosistema:</b> ' + esc(val('ecosistema')) + '</p><p><b>Función:</b> ' + esc(val('funcion')) + '</p><p><b>Acción:</b> ' + esc(val('accionAbE')) + '</p><p><b>Beneficiarios:</b> ' + esc(val('benefAbE')) + '</p>' +
+      '<h4>SbN</h4><p><b>Desafío:</b> ' + esc(val('desafio')) + '</p><p><b>Acción:</b> ' + esc(val('accionSbN')) + '</p><p><b>Beneficios:</b> ' + esc(val('benefSbN')) + '</p><p><b>Tensión:</b> ' + esc(val('tension')) + '</p>' +
+      '<h4>Propuesta integrada</h4><p><b>Enfoque:</b> ' + esc(S.enfoque) + '</p><p><b>Justificación:</b> ' + esc(val('justificacion')) + '</p><p><b>Objetivo:</b> ' + esc(val('objetivo')) + '</p><p><b>Acciones:</b><br>' + esc(val('acciones')).replace(/\n/g,'<br>') + '</p>' +
+      '<h4>Equidad e interseccionalidad</h4><p><b>Decisión:</b> ' + esc(val('decide')) + '</p><p><b>Participación:</b> ' + esc(val('participa')) + '</p><p><b>Costos:</b> ' + esc(val('costos')) + '</p><p><b>Beneficios:</b> ' + esc(val('beneficios')) + '</p><p><b>Diferencias:</b> ' + esc(val('interseccionalidad')) + '</p>' +
+      '<h4>Viabilidad</h4><p><b>Técnica:</b> ' + esc(val('tecnica')) + '</p><p><b>Social:</b> ' + esc(val('social')) + '</p><p><b>Cultural:</b> ' + esc(val('cultural')) + '</p><p><b>Económica/gobernanza:</b> ' + esc(val('economica')) + '</p><p><b>Ambiental:</b> ' + esc(val('ambiental')) + '</p><p><b>Condición mínima:</b> ' + esc(val('condicion')) + '</p>' +
+      '<h4>Pregunta difícil</h4><p><b>Criterio:</b> ' + esc(S.reto) + '</p><p><b>Respuesta:</b> ' + esc(val('respuesta')) + '</p><p><b>Ajuste:</b> ' + esc(val('ajuste')) + '</p>' +
+      '<h4>Retroalimentación retadora</h4><p><b>Indicador:</b> ' + r.score + '/100</p><ul>' +
+      r.ch.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+
+    const doc = document.getElementById('docContent');
+    if (doc) doc.innerHTML = c;
+    window.go(10);
+  };
+
+  window.descargar = function () {
+    const body = (document.getElementById('docContent') || {}).innerHTML || '';
+    const html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Misión Territorio Resiliente · Ficha</title>' +
+      '<style>body{font-family:Arial,sans-serif;max-width:860px;margin:40px auto;padding:0 24px;color:#24322d}h1{font-size:28px}h2{font-size:18px;border-bottom:1px solid #ddd;padding-bottom:5px;margin-top:24px}p{line-height:1.55}</style>' +
+      '</head><body><h1>Misión Territorio Resiliente</h1><p>Ficha de propuesta de intervención</p>' + body + '</body></html>';
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type:'text/html;charset=utf-8' }));
+    a.download = 'Mision_Territorio_Resiliente_Ficha.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  };
+
+  window.reiniciar = function () {
+    document.querySelectorAll('textarea').forEach(function (x) { x.value = ''; });
+    document.querySelectorAll('button.selected').forEach(function (x) { x.classList.remove('selected'); });
+    S.punto = '';
+    S.enfoque = '';
+    S.reto = '';
+    window.go(1);
+  };
+
+  // Inicialización explícita. Esto evita depender del momento en que el navegador
+  // expone los elementos y garantiza que la primera pantalla quede activa.
+  function init() {
+    document.querySelectorAll('.screen').forEach(function (screen) {
+      screen.classList.remove('active');
+    });
+    window.go(1);
+
+    // Respaldo para navegadores/visores que bloqueen onclick inline:
+    document.addEventListener('click', function (event) {
+      const button = event.target.closest('button');
+      if (!button || !button.hasAttribute('onclick')) return;
+
+      // Los navegadores normales ya ejecutan onclick. Este listener solo comprueba
+      // que las funciones estén disponibles; no duplica la acción.
+      if (typeof window.go !== 'function') {
+        event.preventDefault();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script></body></html>
